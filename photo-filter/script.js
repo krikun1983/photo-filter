@@ -34,10 +34,6 @@ let count = 1;
 const countEnd = 20;
 let baseUrlNew = '';
 
-function loadNextImages(src) {
-  images.src = src;
-}
-
 const hour = new Date().getHours();
 
 if (hour >= 6 && hour < 12) {
@@ -54,8 +50,7 @@ function changeNextImages() {
   if (count > countEnd) {
     count = 1;
   }
-  const imageSrc = count < 10 ? `${baseUrlNew}0${count}.jpg` : `${baseUrlNew}${count}.jpg`;
-  loadNextImages(imageSrc);
+  images.src = count < 10 ? `${baseUrlNew}0${count}.jpg` : `${baseUrlNew}${count}.jpg`;
   count++;
 }
 

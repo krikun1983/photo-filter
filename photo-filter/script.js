@@ -1,0 +1,72 @@
+//variable
+const inputsFilters = document.querySelectorAll('.filters input');
+const resetBtn = document.querySelector('.btn-reset');
+const images = document.querySelector('img');
+const nextImages = document.querySelector('.btn-next');
+const btnFullScreen = document.querySelector('.fullscreen');
+
+//add value input into output + filter add photo
+function inputFilterUpdate() {
+  const suffix = this.dataset.sizing;
+  images.style.setProperty(`--${this.name}`, this.value + suffix);
+  this.nextElementSibling.value = this.value;
+}
+
+inputsFilters.forEach((input) => {
+  input.addEventListener('input', inputFilterUpdate)
+});
+
+// function reset
+function defaultFilters() {
+  inputsFilters.forEach((input) => {
+    const suffix = input.dataset.sizing
+    input.value = input.defaultValue
+    images.style.setProperty(`--${input.name}`, input.value + suffix)
+    input.nextElementSibling.value = input.value
+  })
+}
+
+resetBtn.addEventListener('click', defaultFilters);
+
+// function next picture
+const baseUrl = 'https://raw.githubusercontent.com/rolling-scopes-school/stage1-tasks/assets/images/';
+let count = 1;
+const countEnd = 20;
+let baseUrlNew = '';
+
+function loadNextImages(src) {
+  images.src = src;
+}
+
+const hour = new Date().getHours();
+
+if (hour >= 6 && hour < 12) {
+  baseUrlNew = `${baseUrl}morning/`;
+} else if (hour >= 12 && hour < 18) {
+  baseUrlNew = `${baseUrl}day/`;
+} else if (hour >= 18 && hour < 24) {
+  baseUrlNew = `${baseUrl}evening/`;
+} else if (hour >= 0 && hour < 6) {
+  baseUrlNew = `${baseUrl}night/`;
+};
+
+function changeNextImages() {
+  if (count > countEnd) {
+    count = 1;
+  }
+  const imageSrc = count < 10 ? `${baseUrlNew}0${count}.jpg` : `${baseUrlNew}${count}.jpg`;
+  loadNextImages(imageSrc);
+  count++;
+}
+
+nextImages.addEventListener('click', changeNextImages);
+
+//Event fullscreen
+btnFullScreen.addEventListener('click', () => {
+  if (!document.fullscreenElement) {
+    document.documentElement.requestFullscreen();
+  } else {
+    document.exitFullscreen();
+  }
+});
+

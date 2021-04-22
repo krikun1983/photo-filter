@@ -67,12 +67,9 @@ function uploadFile(e) {
     reader.readAsDataURL(file);
   }
   reader.onload = () => {
-    // const img = new Image();
-    // img.src = reader.result;
     images.src = reader.result;
-    console.log(images);
+    btnUploadFile.value = "";
   }
-  // reader.readAsDataURL(file);
 }
 
 btnUploadFile.addEventListener('change', uploadFile);

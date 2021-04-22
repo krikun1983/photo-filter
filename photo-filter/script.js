@@ -4,6 +4,7 @@ const resetBtn = document.querySelector('.btn-reset');
 const images = document.querySelector('img');
 const nextImages = document.querySelector('.btn-next');
 const btnFullScreen = document.querySelector('.fullscreen');
+const btnUploadFile = document.querySelector('#btnInput');
 
 //add value input into output + filter add photo
 function inputFilterUpdate() {
@@ -56,6 +57,27 @@ function changeNextImages() {
 
 nextImages.addEventListener('click', changeNextImages);
 
+
+// Load file
+function uploadFile(e) {
+  const file = btnUploadFile.files[0];
+  const reader = new FileReader();
+
+  if (file) {
+    reader.readAsDataURL(file);
+  }
+  reader.onload = () => {
+    // const img = new Image();
+    // img.src = reader.result;
+    images.src = reader.result;
+    console.log(images);
+  }
+  // reader.readAsDataURL(file);
+}
+
+btnUploadFile.addEventListener('change', uploadFile);
+
+
 //Event fullscreen
 btnFullScreen.addEventListener('click', () => {
   if (!document.fullscreenElement) {
@@ -64,4 +86,3 @@ btnFullScreen.addEventListener('click', () => {
     document.exitFullscreen();
   }
 });
-

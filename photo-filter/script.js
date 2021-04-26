@@ -1,11 +1,20 @@
 //variable
 const inputsFilters = document.querySelectorAll('.filters input');
-const resetBtn = document.querySelector('.btn-reset');
 const images = document.querySelector('img');
-const nextImages = document.querySelector('.btn-next');
+const btnNextImages = document.querySelector('.btn-next');
+const btnReset = document.querySelector('.btn-reset');
 const btnFullScreen = document.querySelector('.fullscreen');
 const btnUploadFile = document.querySelector('#btnInput');
+const btnUploadFileClass = document.querySelector('.btn-load');
 const btnSaveFile = document.querySelector('.btn-save');
+
+//add class btn-active
+function clearBtn() {
+  btnReset.classList.remove('btn-active');
+  btnNextImages.classList.remove('btn-active');
+  btnUploadFileClass.classList.remove('btn-active');
+  btnSaveFile.classList.remove('btn-active');
+}
 
 //add value input into output + filter add photo
 function inputFilterUpdate() {
@@ -25,12 +34,14 @@ function defaultFilters() {
     const suffix = input.dataset.sizing
     input.value = input.defaultValue
     images.style.setProperty(`--${input.name}`, input.value + suffix)
-    input.nextElementSibling.value = input.value
+    input.nextElementSibling.value = input.value;
+    clearBtn();
+    btnReset.classList.add('btn-active');
     drawImage()
   })
 }
 
-resetBtn.addEventListener('click', defaultFilters);
+btnReset.addEventListener('click', defaultFilters);
 
 // function next picture
 
@@ -52,14 +63,16 @@ function getImageDateUrl() {
 }
 
 let count = 1;
-function changeNextImages() {
+function changebtnNextImages() {
   const countEnd = 20;
   if (count > countEnd) count = 1;
   images.src = count < 10 ? `${getImageDateUrl()}0${count}.jpg` : `${getImageDateUrl()}${count}.jpg`;
   count++;
   drawImage();
+  clearBtn();
+  btnNextImages.classList.add('btn-active');
 }
-nextImages.addEventListener('click', changeNextImages);
+btnNextImages.addEventListener('click', changebtnNextImages);
 
 // Load file
 function uploadFile(e) {
@@ -74,6 +87,8 @@ function uploadFile(e) {
     btnUploadFile.value = "";
     drawImage();
   }
+  clearBtn();
+  btnUploadFileClass.classList.add('btn-active');
 }
 
 btnUploadFile.addEventListener('change', uploadFile);
@@ -100,20 +115,20 @@ function drawImage() {
     let saturate = document.querySelector("input[name='saturate'] ~ output").value;
     let hue = document.querySelector("input[name='hue'] ~ output").value;
     ctx.filter = `blur(${blur * factor}px) invert(${invert}%) sepia(${sepia}%) saturate(${saturate}%) hue-rotate(${hue}deg)`;
-    ctx.drawImage(img, 0, 0);
+    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
   };
 }
 drawImage();
 
 btnSaveFile.addEventListener('click', function (e) {
-  console.log(canvas.toDataURL());
   let link = document.createElement("a");
   link.download = "photochangefilter.png";
-  link.href = canvas.toDataURL();
+  link.href = canvas.toDataURL('image/png');
   link.click();
   link.delete;
+  clearBtn();
+  btnSaveFile.classList.add('btn-active');
 });
-
 
 //Event fullscreen
 btnFullScreen.addEventListener('click', () => {

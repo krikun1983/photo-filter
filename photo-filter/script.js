@@ -102,12 +102,12 @@ function drawImage() {
   img.setAttribute('crossOrigin', 'anonymous');
   img.src = images.src;
   img.onload = function () {
-    canvas.width = img.width;
-    canvas.height = img.height;
+    canvas.width = img.naturalWidth;
+    canvas.height = img.naturalHeight;
 
     const heightOrig = images.height;
     const heightImage = images.naturalHeight;
-    let factor = (heightOrig > heightImage) ? heightOrig / heightImage : heightImage / heightOrig;
+    let factor = heightImage / heightOrig;
 
     let blur = document.querySelector("input[name='blur'] ~ output").value;
     let invert = document.querySelector("input[name='invert'] ~ output").value;
